@@ -1,0 +1,41 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {"name": "dataset"},
+  "config": {"view": {"stroke": null}, "font": "Segoe UI", "axis": {"labelColor": "#666666", "titleColor": "#666666", "gridColor": "#EEEEEE", "domainColor": "#BBBBBB", "tickColor": "#BBBBBB", "titleFontWeight": "normal"}},
+  "spacing": 14,
+  "vconcat": [
+    {
+      "width": 870,
+      "height": 26,
+      "data": {"values": [{"k": "p1", "x": 0, "t": "Promedio 2010-14"}, {"k": "p2", "x": 19, "t": "Promedio 2015-19"}, {"k": "a25", "x": 38, "t": "2025"}, {"k": "a26", "x": 48, "t": "2026e (estimación)"}, {"k": "tit", "x": 70, "t": "Crecimiento del PIB real, ALC-6"}]},
+      "encoding": {"x": {"field": "x", "type": "quantitative", "scale": {"domain": [0, 100]}, "axis": null}, "y": {"value": 13}},
+      "layer": [
+        {"transform": [{"filter": "datum.k == 'p1'"}], "mark": {"type": "tick", "orient": "vertical", "thickness": 4, "size": 9, "yOffset": -5, "color": "#3A3F45", "opacity": 1}},
+        {"transform": [{"filter": "datum.k == 'p2'"}], "mark": {"type": "tick", "orient": "vertical", "thickness": 4, "size": 9, "yOffset": 4, "color": "#A3A9B0", "opacity": 1}},
+        {"transform": [{"filter": "datum.k == 'a25'"}], "mark": {"type": "circle", "size": 120, "color": "#1F5AA6", "opacity": 1}},
+        {"transform": [{"filter": "datum.k == 'a26'"}], "mark": {"type": "point", "filled": true, "fill": "white", "stroke": "#1F5AA6", "strokeWidth": 2.5, "size": 120, "opacity": 1}},
+        {"transform": [{"filter": "datum.k != 'tit'"}], "mark": {"type": "text", "align": "left", "dx": 10, "fontSize": 12, "color": "#222222"}, "encoding": {"text": {"field": "t"}}},
+        {"transform": [{"filter": "datum.k == 'tit'"}], "mark": {"type": "text", "align": "left", "fontSize": 12, "fontWeight": "bold", "color": "#1F5AA6"}, "encoding": {"text": {"field": "t"}}}
+      ]
+    },
+    {
+      "width": 470,
+      "height": {"step": 46},
+      "transform": [{"calculate": "replace(format(datum['GDP 2025'], '.1f'), '.', ',')", "as": "E25"}, {"calculate": "replace(replace(format(datum['GDP 2026e'], '.1f'), '.', ','), '-', '−')", "as": "E26"}, {"calculate": "(datum['GDP 2026e'] - datum['Average 2010-2014'] >= 0 ? '+' : '−') + replace(format(abs(datum['GDP 2026e'] - datum['Average 2010-2014']), '.1f'), '.', ',') + ' p.p.'", "as": "B1"}, {"calculate": "(datum['GDP 2026e'] - datum['Average 2015-2019'] >= 0 ? '+' : '−') + replace(format(abs(datum['GDP 2026e'] - datum['Average 2015-2019']), '.1f'), '.', ',') + ' p.p.'", "as": "B2"}],
+      "encoding": {"y": {"field": "Country", "type": "nominal", "title": null, "scale": {"type": "point", "padding": 0.6}, "sort": {"field": "GDP 2026e", "op": "max", "order": "descending"}, "axis": {"domain": false, "ticks": false, "labelFontSize": 12, "labelLimit": 300, "labelPadding": 10, "labelColor": "#222222"}}},
+      "layer": [
+        {"mark": {"type": "rule", "color": "#BBBBBB"}, "encoding": {"x": {"datum": 0, "type": "quantitative", "scale": {"domain": [-2, 9]}, "axis": {"title": "Crecimiento del PIB real (%)", "grid": true, "values": [-2, 0, 2, 4, 6, 8], "labelFontSize": 11}}}},
+        {"mark": {"type": "tick", "orient": "vertical", "thickness": 4, "size": 10, "yOffset": -15, "color": "#3A3F45", "opacity": 1}, "encoding": {"x": {"field": "Average 2010-2014", "type": "quantitative"}, "tooltip": [{"field": "Country", "title": "Grupo"}, {"field": "Average 2010-2014", "title": "Promedio 2010-14 (%)", "format": ".1f"}]}},
+        {"mark": {"type": "tick", "orient": "vertical", "thickness": 4, "size": 10, "yOffset": 15, "color": "#A3A9B0", "opacity": 1}, "encoding": {"x": {"field": "Average 2015-2019", "type": "quantitative"}, "tooltip": [{"field": "Country", "title": "Grupo"}, {"field": "Average 2015-2019", "title": "Promedio 2015-19 (%)", "format": ".1f"}]}},
+        {"mark": {"type": "rule", "strokeWidth": 2.5, "color": "#1F5AA6"}, "encoding": {"x": {"field": "GDP 2025", "type": "quantitative"}, "x2": {"field": "GDP 2026e"}}},
+        {"mark": {"type": "circle", "size": 140, "opacity": 1, "color": "#1F5AA6"}, "encoding": {"x": {"field": "GDP 2025", "type": "quantitative"}, "tooltip": [{"field": "Country", "title": "Grupo"}, {"field": "GDP 2025", "title": "2025 (%)", "format": ".1f"}]}},
+        {"mark": {"type": "point", "filled": true, "fill": "white", "stroke": "#1F5AA6", "strokeWidth": 2.5, "size": 140, "opacity": 1}, "encoding": {"x": {"field": "GDP 2026e", "type": "quantitative"}, "tooltip": [{"field": "Country", "title": "Grupo"}, {"field": "GDP 2026e", "title": "2026e (%)", "format": ".1f"}, {"field": "Average 2010-2014", "title": "Promedio 2010-14 (%)", "format": ".1f"}, {"field": "Average 2015-2019", "title": "Promedio 2015-19 (%)", "format": ".1f"}]}},
+        {"mark": {"type": "text", "fontSize": 12, "align": "right", "color": "#222222"}, "encoding": {"x": {"value": 550}, "text": {"field": "E25"}}},
+        {"mark": {"type": "text", "fontSize": 12, "align": "right", "color": "#222222", "fontWeight": "bold"}, "encoding": {"x": {"value": 630}, "text": {"field": "E26"}}},
+        {"mark": {"type": "text", "fontSize": 12, "align": "right", "color": "#222222"}, "encoding": {"x": {"value": 750}, "text": {"field": "B1"}}},
+        {"mark": {"type": "text", "fontSize": 12, "align": "right", "color": "#222222"}, "encoding": {"x": {"value": 870}, "text": {"field": "B2"}}},
+        {"data": {"values": [{"h": "2025", "px": 550}, {"h": "2026e", "px": 630}, {"h": "− Prom. 2010-14", "px": 750}, {"h": "− Prom. 2015-19", "px": 870}]}, "mark": {"type": "text", "fontSize": 11, "fontWeight": "bold", "align": "right", "color": "#666666"}, "encoding": {"x": {"field": "px", "type": "quantitative", "scale": null}, "y": {"value": -10}, "text": {"field": "h"}}}
+      ]
+    }
+  ]
+}
