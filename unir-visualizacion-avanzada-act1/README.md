@@ -41,4 +41,3 @@ Abre el `.pbix` con Power BI Desktop actualizado (el informe usa el formato PBIR
 
 - Un cliente es recurrente si hizo dos o más pedidos dentro del período observado. Quien llegó en 2020 tuvo menos tiempo para repetir, así que una sola compra no prueba abandono.
 - La tabla de pares se calculó para todo el período y no responde a los filtros.
-- Trabajo grupal: Lorna María Baena Mosquera, Madeline Adriana Díaz Lemus, Manuel Gerardo Huezo y Stephannie Marie Acosta Acosta.
