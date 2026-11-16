@@ -1,0 +1,78 @@
+// Medidas DAX del dashboard "Conocer para fidelizar"
+// Tabla de medidas: _Medidas
+// Sales_data contiene solo el canal Internet (filtrado en Power Query)
+
+Compradores = DISTINCTCOUNT ( Sales_data[CustomerKey] )
+
+Pedidos = DISTINCTCOUNT ( Sales_data[Sales Order] )
+
+Ventas = SUM ( Sales_data[Sales Amount] )
+
+// Pedidos del cliente en todo el período, sin filtros de fecha ni de producto.
+// Fija la clasificación recurrente / una compra aunque se filtre un año o una categoría.
+Pedidos históricos =
+CALCULATE ( [Pedidos], REMOVEFILTERS ( Date_data ), REMOVEFILTERS ( Product_data ) )
+
+Compradores recurrentes =
+COUNTROWS (
+    FILTER ( VALUES ( Sales_data[CustomerKey] ), [Pedidos históricos] >= 2 )
+)
+
+% Recurrentes = DIVIDE ( [Compradores recurrentes], [Compradores] )
+
+Pedidos por comprador = DIVIDE ( [Pedidos], [Compradores] )
+
+// Días entre compras de cada cliente recurrente:
+// (último pedido - primer pedido) / (pedidos - 1); luego promedio entre clientes
+Días entre compras =
+VAR Recurrentes =
+    FILTER ( VALUES ( Sales_data[CustomerKey] ), [Pedidos históricos] >= 2 )
+RETURN
+    AVERAGEX (
+        Recurrentes,
+        VAR k1 = CALCULATE ( MIN ( Sales_data[OrderDateKey] ), REMOVEFILTERS ( Date_data ), REMOVEFILTERS ( Product_data ) )
+        VAR k2 = CALCULATE ( MAX ( Sales_data[OrderDateKey] ), REMOVEFILTERS ( Date_data ), REMOVEFILTERS ( Product_data ) )
+        VAR d1 = DATE ( INT ( k1 / 10000 ), MOD ( INT ( k1 / 100 ), 100 ), MOD ( k1, 100 ) )
+        VAR d2 = DATE ( INT ( k2 / 10000 ), MOD ( INT ( k2 / 100 ), 100 ), MOD ( k2, 100 ) )
+        RETURN DIVIDE ( INT ( d2 - d1 ), [Pedidos históricos] - 1 )
+    )
+
+Días entre compras (mediana) =
+VAR Recurrentes =
+    FILTER ( VALUES ( Sales_data[CustomerKey] ), [Pedidos históricos] >= 2 )
+RETURN
+    MEDIANX (
+        Recurrentes,
+        VAR k1 = CALCULATE ( MIN ( Sales_data[OrderDateKey] ), REMOVEFILTERS ( Date_data ), REMOVEFILTERS ( Product_data ) )
+        VAR k2 = CALCULATE ( MAX ( Sales_data[OrderDateKey] ), REMOVEFILTERS ( Date_data ), REMOVEFILTERS ( Product_data ) )
+        VAR d1 = DATE ( INT ( k1 / 10000 ), MOD ( INT ( k1 / 100 ), 100 ), MOD ( k1, 100 ) )
+        VAR d2 = DATE ( INT ( k2 / 10000 ), MOD ( INT ( k2 / 100 ), 100 ), MOD ( k2, 100 ) )
+        RETURN DIVIDE ( INT ( d2 - d1 ), [Pedidos históricos] - 1 )
+    )
+
+// % de los pedidos del grupo que incluye la categoría (un pedido puede tener varias)
+% Pedidos con la categoría =
+DIVIDE ( [Pedidos], CALCULATE ( [Pedidos], REMOVEFILTERS ( Product_data ) ) )
+
+// Textos dinámicos de la narrativa
+Texto hallazgo =
+FORMAT ( [% Recurrentes], "0.0%" ) & " de los " & FORMAT ( [Compradores], "#,0" )
+    & " compradores volvió a comprar al menos una vez."
+
+Texto países =
+VAR t =
+    FILTER (
+        ADDCOLUMNS ( VALUES ( Customer_data[Country-Region] ), "@r", [% Recurrentes] ),
+        NOT ISBLANK ( [@r] )
+    )
+VAR alto = TOPN ( 1, t, [@r], DESC )
+VAR bajo = TOPN ( 1, t, [@r], ASC )
+RETURN
+    IF (
+        COUNTROWS ( t ) > 1,
+        MAXX ( alto, Customer_data[Country-Region] ) & " tiene la mayor recompra ("
+            & FORMAT ( MAXX ( alto, [@r] ), "0%" ) & ") y "
+            & MAXX ( bajo, Customer_data[Country-Region] ) & " la menor ("
+            & FORMAT ( MAXX ( bajo, [@r] ), "0%" ) & ").",
+        ""
+    )
