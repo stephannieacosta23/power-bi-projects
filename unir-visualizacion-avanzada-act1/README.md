@@ -1,6 +1,6 @@
 # Conocer para fidelizar: recompra de clientes en AdventureWorks
 
-Actividad 1 de Visualización Avanzada y Automatización del Análisis de Datos, Máster Universitario en Inteligencia de Negocio (UNIR), Equipo 7 - Lote 41.
+Actividad 1 de Visualización Avanzada y Automatización del Análisis de Datos, Máster Universitario en Inteligencia de Negocio (UNIR).
 
 Dashboard en Power BI que analiza la recompra y las preferencias de producto de los clientes del canal Internet de AdventureWorks entre el 1 de julio de 2017 y el 15 de junio de 2020. Está pensado para la dirección comercial (página 1) y para el equipo de marketing (página 2), y cada visual lleva como título su conclusión.
 
@@ -20,7 +20,7 @@ Dashboard en Power BI que analiza la recompra y las preferencias de producto de 
 
 | Carpeta | Archivo | Qué es |
 |---|---|---|
-| `powerbi/` | `Act1_VisualizacionAvanzada_Grupo7.pbix` | Informe de Power BI con el modelo, las medidas y las dos páginas |
+| `powerbi/` | `Act1_VisualizacionAvanzada.pbix` | Informe de Power BI con el modelo, las medidas y las dos páginas |
 | `datos/` | `AdventureWorks.xlsx` | Base de la actividad: ventas, pedidos, clientes, productos, revendedores, territorios y fechas |
 | `dax/` | `medidas.dax` | Medidas DAX del dashboard, comentadas |
 | `capturas/` | `pagina1_fidelizacion.png`, `pagina2_detalle_recompra.png` | Vista de las dos páginas |
