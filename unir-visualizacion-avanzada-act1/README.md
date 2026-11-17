@@ -2,6 +2,8 @@
 
 Actividad 1 de Visualización Avanzada y Automatización del Análisis de Datos, Máster Universitario en Inteligencia de Negocio (UNIR).
 
+> **Summary (EN).** Two-page Power BI report on repeat purchases by Internet customers of AdventureWorks, July 2017 to June 2020. 37.1% of buyers placed two or more orders, with a median of 336 days between purchases. Retention ranges from 72% in Australia to 22% in the United States, and bikes appear in 69% of repeat customers' orders against 36% for one-time buyers. Built on a star schema with explicit DAX measures, synced slicers, a reset bookmark and page navigation.
+
 Dashboard en Power BI que analiza la recompra y las preferencias de producto de los clientes del canal Internet de AdventureWorks entre el 1 de julio de 2017 y el 15 de junio de 2020. Está pensado para la dirección comercial (página 1) y para el equipo de marketing (página 2), y cada visual lleva como título su conclusión.
 
 ![Página 1: Fidelización](capturas/pagina1_fidelizacion.png)
